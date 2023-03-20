@@ -21,10 +21,7 @@ jobs:
         #  Low	    0.0-3.9
         #  Medium	4.0-6.9
         #  High	    7.0-10.0
-        if: ${{steps.metadata.outputs.update-type != 'version-update:semver-major' 
-                  && steps.dependabot-metadata.outputs.alert-state == 'OPEN'
-                  && steps.dependabot-metadata.outputs.cvss >= 7.0
-                  && steps.dependabot-metadata.outputs.compatibility-score >= 90.0}}
+        if: ${{steps.metadata.outputs.update-type != 'version-update:semver-major'}}
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
