@@ -1,0 +1,96 @@
+{
+  "name": "Dependabot_Test_Dependencies",
+  "version": "0.0.2",
+  "description": "a",
+  "dependencies": {
+    "jstz": "2.1.1",
+    "jquery": "2.1.1",
+    "sjcl": "1.0.2",
+    "js-md5": "0.7.3",
+    "moment": "2.29.2",
+    "moment-timezone": "0.4.0",
+    "expect.js": "0.3.1",
+    "mocha": "10.2.0",
+    "bootstrap-datepicker": "1.8.0",
+    "typeahead.js": "0.11.1",
+    "clipboard": "1.6.1",
+    "jquery-placeholder": "2.0.2",
+    "viewerjs": "1.3.5",
+    "pdfjs-dist": "1.10.100"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-javascript-obfuscator": "^1.1.6",
+    "gulp-rename": "^2.0.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-strip-comments": "^2.5.2",
+    "gulp-debug": "4.0.0"
+  },
+  "comments": [
+    "Below are the dependencies used within essex that do not have the current version in npm that Essex uses. Also, it is organized by their respective folders.",
+    "These dependencies are in the comment section, as placing them within the dependency section will cause the npm install to crash as the versions for these dependencies are not on npm.",
+    "When the time comes to add in the below dependencies, edit them and 'added to dependencies' next to it - example: 'simple.carousel: 0.3 - Added',",
+    "Root JS",
+    {
+      "bootstrap-formhelpers.min.js": "2.3.0",
+      "bootstrap-switch.js": "1.8",
+      "autosize.js": "1.18.4",
+      "jscolor.js": "1.4.1",
+      "openpgpjsv2": "^5.3.1 - Has multiple files contain in one",
+      "Streamsaver.js": "2.0.6",
+      "stripe.js": "1.32.0",
+      "sfobject.js": "2.3.20130521 - through bower instead of npm",
+      "web-streams-polyfill": "2.0.2",
+      "zip_stream": "4.0.2"
+    },
+    "API",
+    {
+      "FileSaver.js": "2.0.4"
+    },
+    "v3",
+    {
+      "bootstrap-notify.min.js": "3.0.0",
+      "html5shiv.js": "3.7.0",
+      "jquery.mmenu.min.all.js": "4.2.2",
+      "jquery.qtip.min.js": "2.2.1",
+      "respond.min.js": "1.6.2",
+      "simple.carousel.js": "0.3 - not available through npm"
+    },
+    "encrypt",
+    {
+      "sjcl.js": "1.0.2 - variable name inside is changed, not 1-1 completely"
+    },
+    "external",
+    {
+      "Nothing": "We're good here"
+    },
+    "i18n",
+    {
+      "Nothing": "We're good here"
+    },
+    "lib",
+    {
+      "canvas-all.js": "31.1",
+      "post-robot.js": "7.0.1.5",
+      "ResizeSensor.js": "1.0.5 - almost 1-1, but had additonal code changes from base"
+    },
+    "pdf",
+    {
+      "pdf.js": "not specified, also completely different from Essex",
+      "pdf.worker.js": "Same as above",
+      "viewer.js": "combination of various files."
+    },
+    "workers",
+    {
+      "Nothing": "We're good here"
+    },
+    "zendeskV2",
+    {
+      "Nothing": "We're good here"
+    }
+  ],
+  "scripts": {
+    "prebuild": "npm install",
+    "build": "gulp default"
+  }
+}
