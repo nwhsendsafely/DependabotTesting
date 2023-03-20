@@ -21,8 +21,16 @@ jobs:
         #  Low	    0.0-3.9
         #  Medium	4.0-6.9
         #  High	    7.0-10.0
-        if: ${{steps.metadata.outputs.update-type == 'version-update:semver-major'}}
+#        The if way below this does not work..
+#        if: ${{steps.metadata.outputs.update-type == 'version-update:semver-major'}}
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        vulnerabilities:
+          ignore:
+            - "major"
+            - "minor"
+            - "low"
+            - "moderate"
+          severity: "high, critical"
