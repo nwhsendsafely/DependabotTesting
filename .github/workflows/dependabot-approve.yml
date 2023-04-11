@@ -30,3 +30,35 @@ jobs:
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: new Jira issue
+        if: ${{ steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major'
+          && steps.dependabot-metadata.outputs.compatibility-score != '100'
+          && steps.dependabot-metadata.outputs.cvss < '7.0' }}
+        id: issue
+        uses: atlassian/gajira-create@master
+        with:
+          project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
+          # Type of the issue to be created. Example: 'Incident'
+          issuetype: Story # What issue type should this be?
+          summary: Direct Commit to Master # Issue summary
+          # Issue description, in the format of <commit message> <link to commit>
+          description: ${{ github.event.head_commit.message }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+      - name: Get and set the active Sprint ID
+        id: SprintJsoner
+        run: |
+          export SPRINT_JSON=$(curl --location --request GET 'https://sendsafely.atlassian.net/rest/agile/1.0/board/${{secrets.JIRA_BOARD_ID}}/sprint?state=active' \
+          -u ${{secrets.JIRA_USER_EMAIL}}:${{secrets.JIRA_API_TOKEN}} \
+          --header 'Content-Type: application/json')
+          echo "SPRINT_ID=$SPRINT_JSON" >> $GITHUB_OUTPUT
+          echo "Sprint JSON: $SPRINT_JSON"
+      - name: Add issue to the current sprint
+        if: ${{ steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major'
+          && steps.dependabot-metadata.outputs.compatibility-score != '100'
+          && steps.dependabot-metadata.outputs.cvss < '7.0' }}
+        run: |
+          curl --location --request POST 'https://sendsafely.atlassian.net/rest/agile/1.0/sprint/${{fromJson(steps.SprintJsoner.outputs.SPRINT_ID).values[0].id}}/issue' \
+          -u ${{secrets.JIRA_USER_EMAIL}}:${{secrets.JIRA_API_TOKEN}} \
+          --header 'Content-Type: application/json' \
+          --data-raw '{
+            "issues": ["${{steps.issue.outputs.issue}}"]
+          }'
