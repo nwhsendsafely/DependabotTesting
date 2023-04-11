@@ -31,8 +31,7 @@ jobs:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: new Jira issue
-        if: ${{ steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major'
-          && steps.dependabot-metadata.outputs.compatibility-score != '100'
+        if: ${{ steps.dependabot-metadata.outputs.compatibility-score != '100'
           && steps.dependabot-metadata.outputs.cvss < '7.0' }}
         id: issue
         uses: atlassian/gajira-create@master
@@ -52,8 +51,7 @@ jobs:
           echo "SPRINT_ID=$SPRINT_JSON" >> $GITHUB_OUTPUT
           echo "Sprint JSON: $SPRINT_JSON"
       - name: Add issue to the current sprint
-        if: ${{ steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major'
-          && steps.dependabot-metadata.outputs.compatibility-score != '100'
+        if: ${{ steps.dependabot-metadata.outputs.compatibility-score != '100'
           && steps.dependabot-metadata.outputs.cvss < '7.0' }}
         run: |
           curl --location --request POST 'https://sendsafely.atlassian.net/rest/agile/1.0/sprint/${{fromJson(steps.SprintJsoner.outputs.SPRINT_ID).values[0].id}}/issue' \
