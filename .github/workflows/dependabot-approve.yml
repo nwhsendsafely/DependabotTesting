@@ -41,9 +41,9 @@ jobs:
         run: |
           echo ${steps.dependabot-metadata.outputs.cvss}
           if ${steps.dependabot-metadata.outputs.cvss} >= 7.0
-            echo "HIGH" >> $PRIORITY_NAME
+            echo '{ "priority": { "name": "HIGH" } }' >> $PRIORITY_NAME
           then
-            echo "LOW" >> $PRIORITY_NAME
+            echo '{ "priority": { "name": "LOW" } }' >> $PRIORITY_NAME
           if
           echo ${PRIORITY_NAME}
       - name: Create high priority new Jira issue
@@ -55,7 +55,7 @@ jobs:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           issuetype: Bug
           summary: Update major version dependency update
-          fields: '{ "priority": { "name": "' ${{ PRIORITY_NAME }} '" } }'
+          fields: ${{ PRIORITY_NAME }}
           description: ${{ github.event }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
 #      - name: Create medium new Jira issue
 #        if: ${{ steps.dependabot-metadata.outputs.compatibility-score != '100'
