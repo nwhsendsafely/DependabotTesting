@@ -48,7 +48,7 @@ jobs:
 #          echo ${PRIORITY_NAME}
       - name: Create high priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss >= '7.0' }}
-        id: issue high
+        id: issue-high
         uses: atlassian/gajira-create@master
         with:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
@@ -59,7 +59,7 @@ jobs:
       - name: Create medium priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss < '7.0'
           && steps.dependabot-metadata.outputs.cvss >= '4.0'}}
-        id: issue medium
+        id: issue-medium
         uses: atlassian/gajira-create@master
         with:
          project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
@@ -69,7 +69,7 @@ jobs:
          description: ${{ github.event }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
       - name: Create low priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss < '4.0'}}
-        id: issue low
+        id: issue-low
         uses: atlassian/gajira-create@master
         with:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
