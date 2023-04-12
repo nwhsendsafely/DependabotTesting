@@ -45,8 +45,8 @@ jobs:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           issuetype: Bug
           summary: Update dependency
-          fields: '{"priority": "High"}'
-          description: Compatibility-score|  ${{steps.dependabot-metadata.outputs.compatibility-score}} \nCVSS| ${{steps.dependabot-metadata.outputs.cvss}} \nLink + ${{ github.event.head_commit.message }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          fields: '{ "priority": { "name": "High" } }'
+          description: Compatibility-score|  ${{steps.dependabot-metadata.outputs.compatibility-score}} \nCVSS| ${{steps.dependabot-metadata.outputs.cvss}} \nLink| ${{ github.event.head_commit.message }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
 #      - name: Get and set the active Sprint ID
 #        id: SprintJsoner
 #        run: |
