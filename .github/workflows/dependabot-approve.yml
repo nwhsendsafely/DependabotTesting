@@ -44,7 +44,7 @@ jobs:
         with:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           # Type of the issue to be created. Example: 'Incident'
-          issuetype: Story # What issue type should this be?
+          issuetype: Bug # What issue type should this be?
           summary: Direct Commit to Master # Issue summary
           # Issue description, in the format of <commit message> <link to commit>
           description: ${{ github.event.head_commit.message }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
