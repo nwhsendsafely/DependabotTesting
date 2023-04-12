@@ -36,17 +36,35 @@ jobs:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }} # The domain you use to access Jira workspace (e.g. sendsafely.atlassian.net)
           JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }} # The email of the user you want to be creating the issues
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }} # The API token for that user https://confluence.atlassian.com/cloud/api-tokens-938839638.html
-      - name: Create new Jira issue
+      - name: Create high priority new Jira issue
         if: ${{ steps.dependabot-metadata.outputs.compatibility-score != '100'
           && steps.dependabot-metadata.outputs.cvss < '7.0' }}
         id: issue
+        run: |
+          echo ${steps.dependabot-metadata.outputs.cvss}
+          if ${steps.dependabot-metadata.outputs.cvss} >= 7.0
+            echo "HIGH" >> $PRIORITY_NAME
+          then
+            echo "LOW" >> $PRIORITY_NAME
+          if
         uses: atlassian/gajira-create@master
         with:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           issuetype: Bug
-          summary: Update dependency
-          fields: '{ "priority": { "name": "High" } }'
-          description: Compatibility-score|  ${{steps.dependabot-metadata.outputs.compatibility-score}} \nCVSS| ${{steps.dependabot-metadata.outputs.cvss}} \nLink| ${{ github.event.head_commit.message }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          summary: Update major version dependency update
+          fields: '{ "priority": { "name": "if ${{steps.dependabot-metadata.outputs.cvss}} > 7.0 | "High" : "Low" " } }'
+          description: ${{ github.event }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+#      - name: Create medium new Jira issue
+#        if: ${{ steps.dependabot-metadata.outputs.compatibility-score != '100'
+#          && steps.dependabot-metadata.outputs.cvss < '7.0' }}
+#        id: issue
+#        uses: atlassian/gajira-create@master
+#        with:
+#         project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
+#         issuetype: Bug
+#         summary: Update minor version dependency update
+#         fields: '{ "priority": { "name": "Medium" } }'
+#         description: ${{ github.event }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
 #      - name: Get and set the active Sprint ID
 #        id: SprintJsoner
 #        run: |
