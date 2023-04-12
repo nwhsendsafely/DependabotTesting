@@ -36,53 +36,44 @@ jobs:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }} # The domain you use to access Jira workspace (e.g. sendsafely.atlassian.net)
           JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }} # The email of the user you want to be creating the issues
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }} # The API token for that user https://confluence.atlassian.com/cloud/api-tokens-938839638.html
-      - name: Get Priority
-        id: priority
-        run: |
-          echo ${steps.dependabot-metadata.outputs.cvss}
-          if ${steps.dependabot-metadata.outputs.cvss} >= 7.0
-            echo '{ "priority": { "name": "HIGH" } }' >> $PRIORITY_NAME
-          then
-            echo '{ "priority": { "name": "LOW" } }' >> $PRIORITY_NAME
-          if
-          echo ${PRIORITY_NAME}
-      - name: Create high priority new Jira issue
-        if: ${{ steps.dependabot-metadata.outputs.compatibility-score != '100'
-          && steps.dependabot-metadata.outputs.cvss < '7.0' }}
+#      - name: Get Priority
+#        id: priority
+#        run: |
+#          echo ${steps.dependabot-metadata.outputs.cvss}
+#          if ${steps.dependabot-metadata.outputs.cvss} >= 7.0
+#            echo '{ "priority": { "name": "HIGH" } }' >> $PRIORITY_NAME
+#          then
+#            echo '{ "priority": { "name": "LOW" } }' >> $PRIORITY_NAME
+#          if
+#          echo ${PRIORITY_NAME}
+      - name: Create high priority Jira issue
+        if: ${{ steps.dependabot-metadata.outputs.cvss >= '7.0' }}
         id: issue
         uses: atlassian/gajira-create@master
         with:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           issuetype: Bug
-          summary: Update major version dependency update
-          fields: ${{ PRIORITY_NAME }}
+          summary: Review major version dependency update
+          fields: '{ "priority": { "name": "HIGH" } }'
           description: ${{ github.event }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
-#      - name: Create medium new Jira issue
-#        if: ${{ steps.dependabot-metadata.outputs.compatibility-score != '100'
-#          && steps.dependabot-metadata.outputs.cvss < '7.0' }}
-#        id: issue
-#        uses: atlassian/gajira-create@master
-#        with:
-#         project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
-#         issuetype: Bug
-#         summary: Update minor version dependency update
-#         fields: '{ "priority": { "name": "Medium" } }'
-#         description: ${{ github.event }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
-#      - name: Get and set the active Sprint ID
-#        id: SprintJsoner
-#        run: |
-#          export SPRINT_JSON=$(curl --location --request GET 'https://sendsafely.atlassian.net/rest/agile/1.0/board/${{secrets.JIRA_BOARD_ID}}/sprint?state=active' \
-#          -u ${{secrets.JIRA_USER_EMAIL}}:${{secrets.JIRA_API_TOKEN}} \
-#          --header 'Content-Type: application/json')
-#          echo "SPRINT_ID=$SPRINT_JSON" >> $GITHUB_OUTPUT
-#          echo "Sprint JSON: $SPRINT_JSON"
-#      - name: Add issue to the current sprint
-#        if: ${{ steps.dependabot-metadata.outputs.compatibility-score != '100'
-#          && steps.dependabot-metadata.outputs.cvss < '7.0' }}
-#        run: |
-#          curl --location --request POST 'https://sendsafely.atlassian.net/rest/agile/1.0/sprint/${{fromJson(steps.SprintJsoner.outputs.SPRINT_ID).values[0].id}}/issue' \
-#          -u ${{secrets.JIRA_USER_EMAIL}}:${{secrets.JIRA_API_TOKEN}} \
-#          --header 'Content-Type: application/json' \
-#          --data-raw '{
-#            "issues": ["${{steps.issue.outputs.issue}}"]
-#          }'
+      - name: Create medium priority Jira issue
+        if: ${{ steps.dependabot-metadata.outputs.cvss < '7.0'
+          && steps.dependabot-metadata.outputs.cvss >= '4.0'}}
+        id: issue
+        uses: atlassian/gajira-create@master
+        with:
+         project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
+         issuetype: Bug
+         summary: Update minor version dependency update
+         fields: '{ "priority": { "name": "Medium" } }'
+         description: ${{ github.event }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+      - name: Create low priority Jira issue
+        if: ${{ steps.dependabot-metadata.outputs.cvss < '4.0'}}
+        id: issue
+        uses: atlassian/gajira-create@master
+        with:
+          project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
+          issuetype: Bug
+          summary: Update minor version dependency update
+          fields: '{ "priority": { "name": "Low" } }'
+          description: ${{ github.event }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
