@@ -41,7 +41,7 @@ jobs:
         id: issue-high
         uses: atlassian/gajira-create@master
         with:
-          project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
+          project: ${{ secrets.JIRA_ISSUE_KEY }} # Key of the project
           issuetype: Bug
           summary: [Dependabot] Review PR ${{ github.event.pull_request.title }}
           fields: '{ "priority": { "name": "High" } }'
@@ -52,7 +52,7 @@ jobs:
         id: issue-medium
         uses: atlassian/gajira-create@master
         with:
-         project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
+         project: ${{ secrets.JIRA_ISSUE_KEY }} # Key of the project
          issuetype: Bug
          summary: [Dependabot] Review PR ${{ github.event.pull_request.title }}
          fields: '{ "priority": { "name": "Medium" } }'
@@ -62,7 +62,7 @@ jobs:
         id: issue-low
         uses: atlassian/gajira-create@master
         with:
-          project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
+          project: ${{ secrets.JIRA_ISSUE_KEY }} # Key of the project
           issuetype: Bug
           summary: [Dependabot] Review PR ${{ github.event.pull_request.title }}
           fields: '{ "priority": { "name": "Low" } }'
