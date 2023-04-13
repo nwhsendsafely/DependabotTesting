@@ -39,7 +39,7 @@ jobs:
       - name: Get Priority
         id: priority
         run: |
-          if [[ ${steps.dependabot-metadata.outputs.cvss} -gt 7.0 ]]
+          if [[ "${steps.dependabot-metadata.outputs.cvss}" >= '7.0' ]];
             echo '{ "priority": { "name": "HIGH" } }' >> $PRIORITY_NAME
           then
             echo '{ "priority": { "name": "LOW" } }' >> $PRIORITY_NAME
