@@ -43,9 +43,9 @@ jobs:
         with:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           issuetype: Bug
-          summary: Review major version dependency update
+          summary: [Dependabot] Review PR ${{ github.event.pull_request.title }}
           fields: '{ "priority": { "name": "High" } }'
-          description: ${{ toJson(github.event.pull_request) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          description: https://github.com/${{ github.repository }}/commit/${{github.sha}} ${{ github.event.pull_request.body }}
       - name: Create medium priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss < '7.0'
           && steps.dependabot-metadata.outputs.cvss >= '4.0'}}
@@ -54,9 +54,9 @@ jobs:
         with:
          project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
          issuetype: Bug
-         summary: Update minor version dependency update
+         summary: [Dependabot] Review PR ${{ github.event.pull_request.title }}
          fields: '{ "priority": { "name": "Medium" } }'
-         description: ${{ toJson(github.event.pull_request) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+         description: https://github.com/${{ github.repository }}/commit/${{github.sha}} ${{ github.event.pull_request.body }}
       - name: Create low priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss < '4.0'}}
         id: issue-low
@@ -64,6 +64,6 @@ jobs:
         with:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           issuetype: Bug
-          summary: Update minor version dependency update
+          summary: [Dependabot] Review PR ${{ github.event.pull_request.title }}
           fields: '{ "priority": { "name": "Low" } }'
-          description: ${{ toJson(github.event.pull_request) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          description: https://github.com/${{ github.repository }}/commit/${{github.sha}} ${{ github.event.pull_request.body }}
