@@ -45,7 +45,6 @@ jobs:
             $PRIORITY_NAME = '{ "priority": { "name": "Low" } }';
           if
           echo "${PRIORITY_NAME}";
-          EXPORT TEST=${PRIORITY_NAME};
       - name: Create high priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss >= '7.0' }}
         id: issue-high
@@ -75,5 +74,5 @@ jobs:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           issuetype: Bug
           summary: Update minor version dependency update
-          fields: ${TEST}
+          fields: ${PRIORITY_NAME}
           description: ${{ github.event.head_commit }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
