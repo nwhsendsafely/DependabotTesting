@@ -36,16 +36,6 @@ jobs:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }} # The domain you use to access Jira workspace (e.g. sendsafely.atlassian.net)
           JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }} # The email of the user you want to be creating the issues
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }} # The API token for that user https://confluence.atlassian.com/cloud/api-tokens-938839638.html
-      - name: Get Priority
-        id: priority
-        run: |
-          if [[ ${steps.dependabot-metadata.outputs.cvss} -gt '7.0' ]]
-          then
-             $PRIORITY_NAME = '{ "priority": { "name": "High" } }';
-          else
-            $PRIORITY_NAME = '{ "priority": { "name": "Low" } }';
-          fi
-          echo ${PRIORITY_NAME}
       - name: Create high priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss >= '7.0' }}
         id: issue-high
@@ -54,7 +44,7 @@ jobs:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           issuetype: Bug
           summary: Review major version dependency update
-          fields: '{ "priority": { "name": "HIGH" } }'
+          fields: '{ "priority": { "name": "High" } }'
           description: ${{ toJson(github.event) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
       - name: Create medium priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss < '7.0'
@@ -75,5 +65,5 @@ jobs:
           project: ${{secrets.JIRA_ISSUE_KEY}} # Key of the project
           issuetype: Bug
           summary: Update minor version dependency update
-          fields: ${PRIORITY_NAME}
+          fields: '{ "priority": { "name": "Low" } }'
           description: ${{ toJson(github.event) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
