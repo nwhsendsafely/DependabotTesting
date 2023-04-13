@@ -45,7 +45,7 @@ jobs:
           issuetype: Bug
           summary: Review major version dependency update
           fields: '{ "priority": { "name": "High" } }'
-          description: ${{ toJson(github.event.fields) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          description: ${{ toJson(github.event.commits[0].message) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
       - name: Create medium priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss < '7.0'
           && steps.dependabot-metadata.outputs.cvss >= '4.0'}}
@@ -56,7 +56,7 @@ jobs:
          issuetype: Bug
          summary: Update minor version dependency update
          fields: '{ "priority": { "name": "Medium" } }'
-         description: ${{ toJson(github.event.fields) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+         description: ${{ toJson(github.event.commits[0].message) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
       - name: Create low priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss < '4.0'}}
         id: issue-low
@@ -66,4 +66,4 @@ jobs:
           issuetype: Bug
           summary: Update minor version dependency update
           fields: '{ "priority": { "name": "Low" } }'
-          description: ${{ toJson(github.event.fields) }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
+          description: ${{ github.event.commits[0].message }} https://github.com/${{ github.repository }}/commit/${{github.sha}}
