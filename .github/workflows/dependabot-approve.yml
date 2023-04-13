@@ -66,4 +66,4 @@ jobs:
           issuetype: Bug
           summary: Dependabot Review PR ${{ github.event.pull_request.title }}
           fields: '{ "priority": { "name": "Low" } }'
-          description: https://github.com/${{ github.repository }}/commit/${{github.sha}} ${{ github.event.pull_request.body }}
+          description: https://github.com/${{ github.repository }}/commit/${{github.sha}} \\n \n "\n" "\\n" '\n' '\\n'  ${{ github.event.pull_request.body }}
