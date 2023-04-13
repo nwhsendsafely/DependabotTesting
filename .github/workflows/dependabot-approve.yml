@@ -40,8 +40,9 @@ jobs:
         id: priority
         run: |
           if [[ ${steps.dependabot-metadata.outputs.cvss} -gt 7.0 ]]
-             $PRIORITY_NAME = '{ "priority": { "name": "High" } }';
           then
+             $PRIORITY_NAME = '{ "priority": { "name": "High" } }';
+          else
             $PRIORITY_NAME = '{ "priority": { "name": "Low" } }';
           if
           echo "${PRIORITY_NAME}";
