@@ -39,13 +39,13 @@ jobs:
       - name: Get Priority
         id: priority
         run: |
-          if [[ "${steps.dependabot-metadata.outputs.cvss}" >= '7.0' ]];
-            echo '{ "priority": { "name": "HIGH" } }' >> $PRIORITY_NAME
+          if [[ ${steps.dependabot-metadata.outputs.cvss} -gt 7.0 ]]
+             $PRIORITY_NAME = '{ "priority": { "name": "High" } }';
           then
-            echo '{ "priority": { "name": "LOW" } }' >> $PRIORITY_NAME
+            $PRIORITY_NAME = '{ "priority": { "name": "Low" } }';
           if
-          echo "${PRIORITY_NAME}"
-          EXPORT ${PRIORITY_NAME}
+          echo "${PRIORITY_NAME}";
+          EXPORT ${PRIORITY_NAME};
       - name: Create high priority Jira issue
         if: ${{ steps.dependabot-metadata.outputs.cvss >= '7.0' }}
         id: issue-high
